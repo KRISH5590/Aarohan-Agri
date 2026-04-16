@@ -1,177 +1,395 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Arohan Agri</title>
-
-  <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
-
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Poppins', sans-serif;
-    }
-
-    body {
-      background: #f4f9f4;
-      color: #333;
-    }
-
-    header {
-      background: #0b3d2e;
-      color: white;
-      padding: 15px 50px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    header h1 {
-      color: #a8e6cf;
-    }
-
-    nav a {
-      margin: 0 15px;
-      text-decoration: none;
-      color: white;
-      font-weight: 500;
-    }
-
-    nav a:hover {
-      color: #a8e6cf;
-    }
-
-    .hero {
-      height: 90vh;
-      background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
-                  url('https://images.unsplash.com/photo-1500937386664-56d1dfef3854');
-      background-size: cover;
-      background-position: center;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      color: white;
-    }
-
-    .hero h2 {
-      font-size: 3rem;
-      margin-bottom: 20px;
-    }
-
-    .hero p {
-      font-size: 1.2rem;
-      margin-bottom: 30px;
-    }
-
-    .btn {
-      padding: 12px 25px;
-      background: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 25px;
-      text-decoration: none;
-      font-weight: 500;
-      transition: 0.3s;
-    }
-
-    .btn:hover {
-      background: #2e7d32;
-    }
-
-    .features {
-      padding: 60px 50px;
-      text-align: center;
-    }
-
-    .features h2 {
-      margin-bottom: 40px;
-      color: #0b3d2e;
-    }
-
-    .feature-box {
-      display: flex;
-      justify-content: space-around;
-      flex-wrap: wrap;
-    }
-
-    .card {
-      background: white;
-      padding: 20px;
-      margin: 15px;
-      width: 280px;
-      border-radius: 15px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      transition: 0.3s;
-    }
-
-    .card:hover {
-      transform: translateY(-10px);
-    }
-
-    footer {
-      background: #0b3d2e;
-      color: white;
-      text-align: center;
-      padding: 15px;
-      margin-top: 40px;
-    }
-  </style>
+  <title>Aarohan Agri | AI Supply Chain</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;800&family=Nunito:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
 
-  <!-- Header -->
-  <header>
-    <h1>Arohan Agri 🌱</h1>
-    <nav>
-      <a href="#">Home</a>
-      <a href="#">Features</a>
-      <a href="#">About</a>
-      <a href="#">Contact</a>
-    </nav>
-  </header>
+  <!-- Noise overlay -->
+  <div class="noise-overlay"></div>
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <div>
-      <h2>Smart Farming with AI</h2>
-      <p>Empowering farmers with intelligent insights and modern technology</p>
-      <a href="#" class="btn">Get Started</a>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-brand">
+      <div class="brand-icon">🌾</div>
+      <div>
+        <h1 class="brand-name">Aarohan Agri</h1>
+        <span class="brand-sub">AI • IoT • Blockchain</span>
+      </div>
     </div>
-  </section>
 
-  <!-- Features -->
-  <section class="features">
-    <h2>Our Features</h2>
-    <div class="feature-box">
-
-      <div class="card">
-        <h3>🌾 Crop Prediction</h3>
-        <p>AI-based recommendations for best crop selection.</p>
-      </div>
-
-      <div class="card">
-        <h3>📊 Market Insights</h3>
-        <p>Real-time price tracking and smart selling decisions.</p>
-      </div>
-
-      <div class="card">
-        <h3>🌦 Weather Forecast</h3>
-        <p>Accurate weather updates to improve farming efficiency.</p>
-      </div>
-
+    <div class="nav-status">
+      <span class="live-dot"></span>
+      <span class="live-label">LIVE</span>
+      <span class="status-text">Piparia, MP</span>
     </div>
-  </section>
 
-  <!-- Footer -->
-  <footer>
-    <p>© 2026 Arohan Agri | Smart Agriculture Platform</p>
+    <div class="nav-actions">
+      <button onclick="toggleTheme()" id="themeToggle" class="btn-icon" title="Toggle Theme">☽</button>
+      <button onclick="showQRModal()" class="btn-secondary">📱 QR Code</button>
+      <button onclick="simulateHarvest()" class="btn-primary">🔄 Simulate</button>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-badge">🏆 AI for Bharat Hackathon — Final Round</div>
+    <h1 class="hero-title">Smart Farm<br><span class="accent">Intelligence</span></h1>
+    <p class="hero-sub">Real-time IoT monitoring, AI demand forecasting & blockchain traceability for Indian farmers</p>
+  </div>
+
+  <div class="main-container">
+
+    <!-- Tabs -->
+    <div class="tabs-wrapper">
+      <div class="tabs" id="tabBar">
+        <button class="tab tab-active" onclick="openTab(0)">
+          <span class="tab-icon">🌾</span><span>Farm Sensors</span>
+        </button>
+        <button class="tab" onclick="openTab(1)">
+          <span class="tab-icon">🤖</span><span>AI Predictions</span>
+        </button>
+        <button class="tab" onclick="openTab(2)">
+          <span class="tab-icon">🛣️</span><span>Route</span>
+        </button>
+        <button class="tab" onclick="openTab(3)">
+          <span class="tab-icon">🔗</span><span>Blockchain</span>
+        </button>
+        <button class="tab" onclick="openTab(4)">
+          <span class="tab-icon">📱</span><span>Farmer App</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ===== TAB 0: FARM SENSORS ===== -->
+    <div id="tab0" class="tab-content active">
+      <div class="section-header">
+        <h2 class="section-title">Real-time IoT Sensor Data</h2>
+        <span class="section-badge pulse">● Updating every 8s</span>
+      </div>
+
+      <div class="sensor-grid">
+        <div class="sensor-card" id="tempCard">
+          <div class="sensor-icon">🌡️</div>
+          <p class="sensor-value" id="temp">28°C</p>
+          <p class="sensor-label">Temperature</p>
+          <div class="sensor-bar"><div class="sensor-fill" id="tempBar" style="width:56%"></div></div>
+        </div>
+        <div class="sensor-card" id="humCard">
+          <div class="sensor-icon">💧</div>
+          <p class="sensor-value" id="humidity">68%</p>
+          <p class="sensor-label">Humidity</p>
+          <div class="sensor-bar"><div class="sensor-fill" id="humBar" style="width:68%"></div></div>
+        </div>
+        <div class="sensor-card" id="soilCard">
+          <div class="sensor-icon">🌱</div>
+          <p class="sensor-value" id="soil">52%</p>
+          <p class="sensor-label">Soil Moisture</p>
+          <div class="sensor-bar"><div class="sensor-fill" id="soilBar" style="width:52%"></div></div>
+        </div>
+        <div class="sensor-card location-card">
+          <div class="sensor-icon">📍</div>
+          <p class="sensor-value-sm" id="location">Piparia, MP</p>
+          <p class="sensor-label">GPS Location</p>
+          <p class="sensor-coords">22.85°N 78.45°E</p>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3>Sensor Readings — Last 12 Hours</h3>
+          <div class="chart-legend">
+            <span class="legend-dot" style="background:#00ff6a"></span> Temp
+            <span class="legend-dot" style="background:#38bdf8"></span> Humidity
+            <span class="legend-dot" style="background:#fb923c"></span> Soil
+          </div>
+        </div>
+        <canvas id="sensorChart"></canvas>
+      </div>
+
+      <div class="section-header mt-8">
+        <h2 class="section-title">5-Day Weather Forecast</h2>
+        <span class="section-badge">Piparia, Madhya Pradesh</span>
+      </div>
+      <div id="weatherContainer" class="weather-grid">
+        <div class="weather-loading">Loading forecast...</div>
+      </div>
+    </div>
+
+    <!-- ===== TAB 1: AI PREDICTIONS ===== -->
+    <div id="tab1" class="tab-content">
+      <div class="section-header">
+        <h2 class="section-title">AI Demand Forecasting</h2>
+        <span class="section-badge">Powered by ML Model</span>
+      </div>
+
+      <div class="ai-stats-grid">
+        <div class="ai-stat-card highlight">
+          <p class="ai-stat-label">Price Forecast (7d)</p>
+          <p class="ai-stat-value" id="priceForecast">₹2,840/q</p>
+          <p class="ai-stat-delta positive">↑ 12.3% vs last week</p>
+        </div>
+        <div class="ai-stat-card">
+          <p class="ai-stat-label">Demand Index</p>
+          <p class="ai-stat-value">87/100</p>
+          <p class="ai-stat-delta positive">High Demand</p>
+        </div>
+        <div class="ai-stat-card">
+          <p class="ai-stat-label">Best Market</p>
+          <p class="ai-stat-value">Indore</p>
+          <p class="ai-stat-delta">156 km away</p>
+        </div>
+        <div class="ai-stat-card">
+          <p class="ai-stat-label">Profit Margin</p>
+          <p class="ai-stat-value">31%</p>
+          <p class="ai-stat-delta positive">↑ After logistics</p>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3>Crop Demand Forecast — Next 30 Days</h3>
+        </div>
+        <canvas id="demandChart"></canvas>
+      </div>
+
+      <div class="recommendations">
+        <h3 class="rec-title">🤖 AI Recommendations</h3>
+        <div class="rec-grid" id="recGrid">
+          <div class="rec-card">
+            <span class="rec-badge urgent">Urgent</span>
+            <p class="rec-text">Harvest wheat within <strong>3 days</strong> — moisture optimal at 14.2%</p>
+          </div>
+          <div class="rec-card">
+            <span class="rec-badge good">Opportunity</span>
+            <p class="rec-text">Soybean prices rising in <strong>Bhopal Mandi</strong> — sell 40% stock now</p>
+          </div>
+          <div class="rec-card">
+            <span class="rec-badge warning">Warning</span>
+            <p class="rec-text">Rain forecast Friday — avoid transport on <strong>Apr 18–19</strong></p>
+          </div>
+          <div class="rec-card">
+            <span class="rec-badge good">Tip</span>
+            <p class="rec-text">Cold storage at Pipariya available for <strong>₹2.1/kg/month</strong></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== TAB 2: ROUTE ===== -->
+    <div id="tab2" class="tab-content">
+      <div class="section-header">
+        <h2 class="section-title">AI Route Optimization</h2>
+        <span class="section-badge">Live Traffic Aware</span>
+      </div>
+
+      <div class="route-info-bar">
+        <div class="route-stat">
+          <span class="route-stat-val" id="routeDist">156 km</span>
+          <span class="route-stat-label">Distance</span>
+        </div>
+        <div class="route-divider"></div>
+        <div class="route-stat">
+          <span class="route-stat-val" id="routeTime">3h 20m</span>
+          <span class="route-stat-label">Est. Time</span>
+        </div>
+        <div class="route-divider"></div>
+        <div class="route-stat">
+          <span class="route-stat-val" id="routeCost">₹1,850</span>
+          <span class="route-stat-label">Logistics Cost</span>
+        </div>
+        <div class="route-divider"></div>
+        <div class="route-stat">
+          <span class="route-stat-val" id="routeSave">₹420</span>
+          <span class="route-stat-label">AI Savings</span>
+        </div>
+        <button onclick="optimizeRoute()" class="btn-primary ml-auto">🔁 Re-optimize</button>
+      </div>
+
+      <div id="map" class="map-container"></div>
+
+      <div class="route-stops">
+        <h3 class="stops-title">Route Waypoints</h3>
+        <div class="stops-list" id="stopsList">
+          <div class="stop-item active">
+            <div class="stop-dot farm"></div>
+            <div><strong>Piparia Farm</strong><br><span class="stop-sub">Origin • 8:00 AM</span></div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-dot warehouse"></div>
+            <div><strong>Pipariya Cold Storage</strong><br><span class="stop-sub">Waypoint • 9:15 AM</span></div>
+          </div>
+          <div class="stop-item">
+            <div class="stop-dot market"></div>
+            <div><strong>Indore Mandi Market</strong><br><span class="stop-sub">Destination • 11:20 AM</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== TAB 3: BLOCKCHAIN ===== -->
+    <div id="tab3" class="tab-content">
+      <div class="section-header">
+        <h2 class="section-title">Blockchain Traceability</h2>
+        <span class="section-badge">Immutable Ledger</span>
+      </div>
+
+      <div class="chain-stats">
+        <div class="chain-stat-card">
+          <p class="chain-stat-val" id="blockCount">14</p>
+          <p class="chain-stat-label">Blocks Mined</p>
+        </div>
+        <div class="chain-stat-card">
+          <p class="chain-stat-val">SHA-256</p>
+          <p class="chain-stat-label">Hash Algorithm</p>
+        </div>
+        <div class="chain-stat-card">
+          <p class="chain-stat-val" style="color:#00ff6a">✓ Valid</p>
+          <p class="chain-stat-label">Chain Status</p>
+        </div>
+        <div class="chain-stat-card">
+          <p class="chain-stat-val" id="chainTime">Just now</p>
+          <p class="chain-stat-label">Last Block</p>
+        </div>
+      </div>
+
+      <div class="blockchain-ledger" id="blockchainLedger">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+
+    <!-- ===== TAB 4: FARMER APP ===== -->
+    <div id="tab4" class="tab-content">
+      <div class="section-header">
+        <h2 class="section-title">Farmer Mobile App</h2>
+        <span class="section-badge">PWA Ready</span>
+      </div>
+
+      <div class="app-layout">
+        <!-- Phone mockup -->
+        <div class="phone-mockup">
+          <div class="phone-frame">
+            <div class="phone-notch"></div>
+            <div class="phone-screen">
+              <div class="app-header">
+                <span>🌾 Aarohan</span>
+                <span class="app-time" id="appTime">--:--</span>
+              </div>
+              <div class="app-farmer">
+                <div class="farmer-avatar">👨‍🌾</div>
+                <div>
+                  <p class="farmer-name">Ramesh Patel</p>
+                  <p class="farmer-loc">Piparia, MP</p>
+                </div>
+              </div>
+              <div class="app-cards-mini">
+                <div class="app-mini-card">
+                  <p class="app-mini-val" id="appTemp">28°</p>
+                  <p class="app-mini-label">Temp</p>
+                </div>
+                <div class="app-mini-card">
+                  <p class="app-mini-val" id="appHum">68%</p>
+                  <p class="app-mini-label">Humidity</p>
+                </div>
+                <div class="app-mini-card">
+                  <p class="app-mini-val" id="appSoil">52%</p>
+                  <p class="app-mini-label">Soil</p>
+                </div>
+              </div>
+              <div class="app-alert">
+                ⚡ Harvest in 3 days for best yield!
+              </div>
+              <div class="app-price-row">
+                <span>🌾 Wheat</span>
+                <span class="app-price">₹2,840/q ↑</span>
+              </div>
+              <div class="app-price-row">
+                <span>🫘 Soybean</span>
+                <span class="app-price">₹4,210/q ↑</span>
+              </div>
+              <div class="app-btns">
+                <button class="app-btn">📦 Sell</button>
+                <button class="app-btn">🗺️ Route</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Features list -->
+        <div class="app-features">
+          <h3 class="features-title">App Features</h3>
+          <div class="feature-list">
+            <div class="feature-item">
+              <div class="feature-icon">🌡️</div>
+              <div><strong>Live Sensor Feed</strong><br><span>Real-time temp, humidity & soil moisture via IoT</span></div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon">📈</div>
+              <div><strong>Price Alerts</strong><br><span>AI-driven mandi price notifications</span></div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon">🛣️</div>
+              <div><strong>Route Planner</strong><br><span>Optimize delivery routes to save fuel cost</span></div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon">🔗</div>
+              <div><strong>Blockchain Receipt</strong><br><span>Scan QR to verify your crop's journey</span></div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon">🌦️</div>
+              <div><strong>Hyperlocal Weather</strong><br><span>5-day forecast for your exact farm location</span></div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon">💳</div>
+              <div><strong>Direct Payments</strong><br><span>UPI-linked instant settlement — no middlemen</span></div>
+            </div>
+          </div>
+          <button onclick="showQRModal()" class="btn-primary w-full mt-6">📲 Download App via QR</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end main-container -->
+
+  <!-- QR Modal -->
+  <div id="qrModal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <button onclick="hideQRModal()" class="modal-close">✕</button>
+      <h3 class="modal-title">Scan to View Prototype</h3>
+      <p class="modal-sub">Works on any mobile browser</p>
+      <div id="qrcode" class="qr-container"></div>
+      <p class="qr-url">aarohan-agri.vercel.app</p>
+    </div>
+  </div>
+
+  <!-- Simulate Modal -->
+  <div id="simulateModal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <button onclick="hideSimulateModal()" class="modal-close">✕</button>
+      <h3 class="modal-title">🔄 Harvest Simulated!</h3>
+      <p class="modal-sub">New sensor readings generated</p>
+      <div id="simResults" class="sim-results"></div>
+      <button onclick="hideSimulateModal()" class="btn-primary w-full mt-4">Done</button>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <span>Aarohan Agri</span>
+    <span class="footer-dot">•</span>
+    <span>AI for Bharat Hackathon — Final Round</span>
+    <span class="footer-dot">•</span>
+    <span>Built with ❤️ for Indian Farmers</span>
   </footer>
 
+  <script src="script.js"></script>
 </body>
 </html>
